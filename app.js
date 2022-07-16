@@ -29,8 +29,12 @@ function generatePictures(data) {
   data.photos.forEach((photo) => {
     const galleryImg = document.createElement("div");
     galleryImg.classList.add("gallery-img");
-    galleryImg.innerHTML = `<img src=${photo.src.large}></img>
+    galleryImg.innerHTML = `
+        <div class="gallery-info"> 
         <p>${photo.photographer}</p>
+        <a href=${photo.src.original}>Download</a>
+        </div>
+        <img src=${photo.src.large}></img>
         `;
     gallery.appendChild(galleryImg);
   });
@@ -42,9 +46,15 @@ async function curatedPhotos() {
 }
 
 async function searchPhotos(search) {
+  clear();
   const data = await fetchApi(
     `https://api.pexels.com/v1/search?query=${search}+query&per_page=15`
   );
   generatePictures(data);
 }
+function clear() {
+  gallery.innerHTML = "";
+  searchInput.value = "";
+}
+
 curatedPhotos();
